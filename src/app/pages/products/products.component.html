@@ -1,0 +1,23 @@
+<h1>productos disponibles!</h1>
+<table class="table table-dark table-hover">
+  <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Producto</th>
+        <th scope="col">Precio</th>
+        <th scope="col">Descripción</th>
+        <th scope="col">Detalles</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (product of productLista; track $index) {
+      <tr>
+      <th scope="row">{{product.id}}</th>
+      <td>{{product.title}}</td>
+      <td>{{product.price | currency}}</td>
+      <td>{{product.description}}</td>
+      <td><button type="button" class="btn btn-success" (click)="navegate(product.id)">Success</button></td>
+      </tr>
+    }
+  </tbody>
+</table>

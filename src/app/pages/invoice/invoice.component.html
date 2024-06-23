@@ -1,0 +1,111 @@
+<div class="container">
+  <div class="card my-3">
+    <div class="card-header active">
+      <h2 class="text-center">Datos de la Facturación</h2>
+    </div>
+    <div class="card-body">
+      <div class="my-3">
+        <ul class="list-group">
+          <li class="list-group-item">Num: {{invoice.id}}</li>
+          <li class="list-group-item">Nombre: {{invoice.name}}</li>
+        </ul>
+      </div>
+      <div class="row">
+        <div class="col my-3">
+          <h3>Datos del Cliente</h3>
+          <ul class="list-group">
+            <li class="list-group-item">{{invoice.client.name}} {{invoice.client.lastname}}</li>
+            <li class="list-group-item">{{invoice.client.address.country}} {{invoice.client.address.city}}</li>
+            <li class="list-group-item">{{invoice.client.address.street}} {{invoice.client.address.number}}</li>
+          </ul>
+        </div>
+        <div class="col my-3">
+          <h3>Datos de la Empresa</h3>
+          <ul class="list-group">
+            <li class="list-group-item">{{invoice.company.name}}</li>
+            <li class="list-group-item">{{invoice.company.fiscalNumber}}</li>
+          </ul>
+        </div>
+      </div>
+      <h3>Detalles de la Facturacion</h3>
+      @if(invoice.items.length > 0){
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for(item of invoice.items; track $index){
+          <tr>
+            <td>{{item.id}}</td>
+            <td>{{item.product}}</td>
+            <td>{{item.price}}</td>
+            <td>{{item.quantity}}</td>
+            <td><button class="btn btn-danger btn-sm" (click)="removeItem(item.id)">Eliminar</button></td>
+          </tr>
+          }
+        </tbody>
+      </table>
+      }@else{
+      <div class="alert alert-warning">No tiene Items la factura..!</div>
+      }
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <span class="badge bg-success me-md-2 text-center">TOTAL: {{invoice.total}}</span>
+      </div>
+      <div class="row">
+        <h3>Agregar productos a la Factura</h3>
+        <form class="w-50" (ngSubmit)="onSubmit(itemForm)" #itemForm="ngForm">
+          <input name="product" placeholder="Producto" class="form-control m-3" [(ngModel)]="item.product" required
+            minlength="5" #product="ngModel">
+          @if (product.invalid && (product.dirty || product.touched)) {
+          @if (product.errors!['required']) {
+          <div class="text-danger">
+            Nombre del producto es requerido
+          </div>
+          }
+          @if (product.errors!['minlength']) {
+          <div class="text-danger">
+            Nombre del producto debe tener minimo 5 caracteres
+          </div>
+          }
+          }
+          <input type="number" name="price" placeholder="Precio" class="form-control m-3" [(ngModel)]="item.price"
+            required min="3" #price="ngModel">
+            @if (price.invalid && (price.dirty || price.touched)) {
+              @if (price.errors!['required']) {
+              <div class="text-danger">
+                El precio es requerido
+              </div>
+              }
+              @if (price.errors!['min']) {
+              <div class="text-danger">
+                Precio debe ser minimo 3 digitos
+              </div>
+              }
+              }
+          <input type="number" name="quantity" placeholder="Cantidad" class="form-control m-3"
+            [(ngModel)]="item.quantity" required min="1" #quantity="ngModel">
+            @if (quantity.invalid && (quantity.dirty || quantity.touched)) {
+              @if (quantity.errors!['required']) {
+              <div class="text-danger">
+                Cantidad es requerida
+              </div>
+              }
+              @if (quantity.errors!['min']) {
+              <div class="text-danger">
+                Cantidad debe ser minimo 1
+              </div>
+              }
+              }
+
+          <button class="btn btn-primary m-3" [disabled]="itemForm.invalid">Nuevo producto</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
